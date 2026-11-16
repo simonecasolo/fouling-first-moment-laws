@@ -11,6 +11,17 @@ __pycache__/
 # editors / backups
 *.bak*
 *~
+*_to_delete/
+_preview/
+preview_*
+
+# patches / revision-tracking artifacts from manuscript drafting
+*patch*.tex
+*.diff
+
+# inference / plant-data byproducts (should never apply here, kept as a guard)
+sbi-logs/
+*sbi*.log
 
 # LaTeX build artifacts (should a manuscript source ever be added here)
 *.aux
