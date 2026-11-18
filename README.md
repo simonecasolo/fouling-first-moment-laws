@@ -1,6 +1,6 @@
 # Code and reproducibility notebooks for "Classical heat exchanger fouling-resistance laws as first-moment identities of additive stochastic deposition"
 
-Simone Casolo (Cognite, Oslo, Norway) — [ORCID 0000-0003-2945-8931](https://orcid.org/0000-0003-2945-8931)
+Simone Casolo — [ORCID 0000-0003-2945-8931](https://orcid.org/0000-0003-2945-8931)
 
 - **Paper:** [arXiv:2611.22808](https://arxiv.org/abs/2611.22808) [eess.SY]
 - **Interactive explainer:** <https://simonecasolo.github.io/projects/0_fouling_theory/>
