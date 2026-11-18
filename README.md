@@ -1,6 +1,9 @@
-# Code and reproducibility notebooks for "Classical fouling laws as first-moment identities of additive stochastic deposition"
+# Code and reproducibility notebooks for "Classical heat exchanger fouling-resistance laws as first-moment identities of additive stochastic deposition"
 
 Simone Casolo (Cognite, Oslo, Norway) — [ORCID 0000-0003-2945-8931](https://orcid.org/0000-0003-2945-8931)
+
+- **Paper:** [arXiv:2611.22808](https://arxiv.org/abs/2611.22808) [eess.SY]
+- **Interactive explainer:** <https://simonecasolo.github.io/projects/0_fouling_theory/>
 
 ## What the paper shows
 
@@ -31,6 +34,7 @@ data/                                  small CSV results consumed by 01_figures.
 figures/                               generated PDF/PNG figures (populated by running
                                         the notebooks above)
 tutorials/                             optional, not required to reproduce the paper
+manuscript/                            paper and Supplementary Material (PDF) and their LaTeX sources
 ```
 
 ## Figure → notebook → output file
@@ -75,9 +79,21 @@ minute.
 
 ## Citation
 
-See [`CITATION.cff`](CITATION.cff). Please cite both the paper (once
-published — see `CITATION.cff` for the entry to fill in) and this
-repository if you use the code.
+If you use this code, please cite the paper and this repository:
+
+```bibtex
+@misc{Casolo2026fouling,
+  author        = {Casolo, Simone},
+  title         = {Classical heat exchanger fouling-resistance laws as first-moment identities of additive stochastic deposition},
+  year          = {2026},
+  eprint        = {2611.22808},
+  archivePrefix = {arXiv},
+  primaryClass  = {eess.SY},
+  url           = {https://arxiv.org/abs/2611.22808}
+}
+```
+
+The repository's own citation entry is in [`CITATION.cff`](CITATION.cff).
 
 ## License
 
