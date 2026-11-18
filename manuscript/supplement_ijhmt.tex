@@ -4,6 +4,7 @@
 \usepackage{lmodern}
 \usepackage{microtype}
 \usepackage{amsmath,amssymb,bm,graphicx}
+\graphicspath{{../figures/}}
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{orcidlink}
@@ -238,7 +239,7 @@ in that limit.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{Figures/figS1_alpha_continuum.pdf}
+\includegraphics[width=\textwidth]{figS1_alpha_continuum.pdf}
 \caption{The tempered-stable family as a continuum, at common $m$, $c$ and
 $\tau_0$. (a)~Standardized skewness and excess kurtosis, in units of
 $c(\Delta)$ and $c(\Delta)^2$, against $u=1/(1-\alpha)$ (top axis: $\alpha$):
@@ -581,7 +582,7 @@ blocking, are compared in Fig.~\ref{fig:S_removal}.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{Figures/figS2_removal_moments.pdf}
+\includegraphics[width=\textwidth]{figS2_removal_moments.pdf}
 \caption{Removal mechanisms with the same mean $R_\infty=m/\psi$ and
 relaxation rate $\psi$ ($m=c=\tau_0=1$, $\psi=0.2$, Gamma deposition; lines
 exact, markers Monte Carlo). (a)~Transient variance, normalized by the
@@ -637,7 +638,7 @@ Figure~\ref{fig:S_nonlinear} compares the closure with simulation.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{Figures/figS3_nonlinear_removal.pdf}
+\includegraphics[width=\textwidth]{figS3_nonlinear_removal.pdf}
 \caption{Nonlinear removal, $g(R)=\psi R+\varepsilon R^2$ ($m=\tau_0=1$,
 $\psi=0.2$, $\varepsilon=0.05$, Gamma deposition). (a)~Shift of the
 stationary mean from the mean-field plateau $m=g(\mu)$, against the relative
@@ -769,7 +770,7 @@ converge on the law-specific values (Fig.~\ref{fig:S_recovery}).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=90mm]{Figures/figS4_mechanism_recovery.pdf}
+\includegraphics[width=90mm]{figS4_mechanism_recovery.pdf}
 \caption{Recovering the microscopic law from skewness and kurtosis:
 finite-record convergence of the sample estimators, at $m$, $c=2$, $\tau_0$,
 noise-free. For $N$ independent periods (300 Monte Carlo records per $N$),
@@ -834,7 +835,7 @@ Eq.~\eqref{eq:S_atten}, is a property of the measurement and applies to any
 estimator.
 \begin{figure}[t]
 \centering
-\includegraphics[width=90mm]{Figures/figS5_record_validation.pdf}
+\includegraphics[width=90mm]{figS5_record_validation.pdf}
 \caption{Monte Carlo test of the record-length estimate,
 Eq.~\eqref{eq:Nreq_general}, for the Gamma and inverse-Gaussian laws at $c=2$.
 Each record of $N$ base periods is observed with Gaussian noise set by
@@ -870,7 +871,7 @@ normal approximation $\Phi_{\mathrm G}\bigl[(mt-(x-R_0))/(cm\sqrt{\tau_0t})\bigr
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{Figures/figS6_fpt_validation}
+\includegraphics[width=\textwidth]{figS6_fpt_validation}
 \caption{Range of validity of the first-passage formulas, by Monte Carlo at
 $c=2$ for the three matched laws. (a) $\mathbb E[T_x]-n_x$ vs.\ the predicted
 $(1+c^2)/2$ (dashed; error bars $\pm1$ Monte Carlo s.e.). (b)
