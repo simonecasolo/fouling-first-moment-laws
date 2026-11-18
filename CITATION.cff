@@ -6,7 +6,6 @@ authors:
   - family-names: Casolo
     given-names: Simone
     orcid: "https://orcid.org/0000-0003-2945-8931"
-    affiliation: Cognite
 repository-code: "https://github.com/simonecasolo/fouling-first-moment-laws"
 license: MIT
 date-released: "2026-11-16"
@@ -16,7 +15,6 @@ preferred-citation:
     - family-names: Casolo
       given-names: Simone
       orcid: "https://orcid.org/0000-0003-2945-8931"
-      affiliation: Cognite
   title: "Classical heat exchanger fouling-resistance laws as first-moment identities of additive stochastic deposition"
   year: 2026
   month: 11
