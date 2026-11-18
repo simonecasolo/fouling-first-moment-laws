@@ -1,0 +1,1501 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\definecolor{oiblue}{HTML}{0072B2}
+\definecolor{oiverm}{HTML}{D55E00}
+\usepackage{graphicx}
+\newcommand{\dd}{\mathrm{d}}
+\emergencystretch=4em
+\usepackage{hyperref}
+\usepackage{orcidlink}
+
+\journal{International Journal of Heat and Mass Transfer}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Classical heat exchanger fouling-resistance laws as first-moment identities of additive stochastic deposition}
+
+\author[cog]{Simone Casolo\,\orcidlink{0000-0003-2945-8931}\corref{cor1}}
+\ead{simone.casolo@cognite.com}
+\cortext[cor1]{Corresponding author.}
+\affiliation[cog]{organization={Cognite},
+            addressline={John Strandruds vei 10},
+            postcode={1360},
+            city={Fornebu},
+            country={Norway}}
+
+\begin{abstract}
+Heat-exchanger fouling is monitored through the fouling resistance, whose
+record is routinely fitted with the classical linear (Ebert--Panchal) or asymptotic
+(Kern--Seaton) law, and the shape of the fit is often taken as evidence of the
+underlying deposition or removal mechanism. We show that it cannot be. If the
+deposit grows by non-negative, statistically stationary increments, the mean
+fouling resistance is exactly linear without removal and exactly the
+Kern--Seaton asymptote under first-order removal, whatever the microscopic
+deposition law. Shear-driven erosion, per-element detachment, intermittent
+sloughing and saturation of the surface all give the same mean curve, so a fit
+identifies a net deposition rate and a relaxation time, and nothing else.
+Modelling the deposit as a L\'evy subordinator, we show where the missing
+information lies and what it costs to retrieve it from monitoring data.
+Removal mechanisms separate in the variance: sloughing leaves a plateau
+scatter that persists even for smooth deposition and can be read from a
+record that saturates. Deposition laws separate only in higher cumulants,
+which the measurement noise of a thermally reconstructed resistance
+attenuates; the record needed to distinguish them grows as the fourth power
+of the conductance error, which places it beyond reach at realistic
+measurement accuracy. For the time to reach a cleaning limit, the deposition
+law matters only near the threshold; farther away, the mean rate and its
+uncertainty dominate the prediction.
+\end{abstract}
+
+\begin{highlights}
+\item In the mean, linear and asymptotic fouling laws are exact for any additive mechanism
+\item Four unrelated fouling mechanisms produce identical mean resistance curves
+\item The fluctuations, not the mean, carry the mechanism information
+\item Plateau scatter separates sloughing from continuous removal in saturating records
+\item At realistic sensor noise, the deposition law cannot be identified from data
+\end{highlights}
+
+\begin{keyword}
+heat exchanger fouling \sep fouling resistance \sep Kern--Seaton model \sep
+stochastic deposition \sep model identifiability \sep measurement uncertainty \sep
+cleaning scheduling
+\end{keyword}
+
+\end{frontmatter}
+
+\input{nomenclature}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Fouling, the slow accumulation of material at the interface between a
+flowing phase and a solid, is monitored in heat exchangers through the fouling
+resistance. Its growth costs fuel, design margin and
+production lost to cleaning~\cite{Epstein1983,Bott1995,MullerSteinhagen2011},
+and the operator's question is when it will reach the 
+limit at which cleaning becomes 
+necessary~\cite{IshiyamaCleaning2011,Pogiatzis2012}. In operation the
+resistance is not measured but reconstructed from temperatures and flow rates
+through the exchanger's energy balance~\cite{Tatara2011,Shen2015}, so that
+its change from one sampling period to the next is typically smaller than its
+measurement error. Decades of work have
+identified the contributing processes in detail, such as
+particle transport and attachment, crystallization, chemical reactions and ageing~\cite{Taborek1972a,Somerscales1990,MullerSteinhagen2011,AugustinMeloWilson2025}.
+Fouling records are often still read against two main models, shown in Fig.~\ref{fig:models}.
+Kern and Seaton
+assume deposition at a constant rate and removal proportional to the deposit,
+giving an asymptotic rise to a plateau~\cite{KernSeaton1959}; Ebert and
+Panchal set a thermally activated deposition rate against a shear-dependent
+term, giving a threshold above which the resistance grows
+linearly~\cite{EbertPanchal1997}.
+Records are routinely sorted as linear, falling-rate or
+asymptotic~\cite{Epstein1983,Somerscales1990,Bott1995,MullerSteinhagen2011},
+while subsequent work has concentrated on what sets the \emph{rate}: particle
+transport and
+attachment~\cite{Yao1971,Epstein1988,Bohnet1987,Kostoglou1998,Brahim2003,Han2019},
+crystallization and wax deposition~\cite{Maddahi2019,Akbarzadeh2008},
+chemical-reaction fouling~\cite{WatkinsonWilson1997,EP6,EP4,EP3,EP2,EP1,Wilson24052017,Geddert2009,Mayer2013,YangCFD2020},
+ageing~\cite{EP5,Ishiyama2011,IshiyamaAgeing2013,ColettiMacchietto2011,DiazBejarano2015,ColettiCrittenden2015,Diaz-Bejarano24052017}
+and parameter estimation or data-driven prediction from plant
+data~\cite{LoyolaFuentes2019,LoyolaFuentesSmith2019,Markowski2025,Sundar2020}.
+Replicate fouling runs under identical conditions scatter
+widely~\cite{Zubair1997CaCO3}, and probabilistic treatments attach this scatter
+to the deterministic laws as random growth parameters, from which they derive
+time-to-cleaning distributions and maintenance
+policies~\cite{Zubair1992,Zubair1997,Zubair2000,Sheikh2001}; other stochastic
+treatments~\cite{Vatistas1988,Flora1993,Wessling2001,Liu2020} are mostly
+simulations. None derives the deterministic laws from the
+stochastic deposition, or asks what the distribution of the fouling measure
+allows a record to identify.
+
+If fouling reflects many coupled processes, each with its own strong
+dependence on operating conditions, why do measured trajectories repeatedly
+collapse onto a small number of elementary shapes? The usual reading is that
+the shape identifies the dominant mechanism. In heat
+exchangers an asymptote is read as the signature of removal~\cite{Shaikh2023,Fguiri2020}, as the
+Kern--Seaton derivation suggests, and the saw-tooth pattern and scatter of
+plant data as evidence of it~\cite{Crittenden1992}; yet Ebert and Panchal's
+threshold concerns only the initial rate, and linear growth is not evidence
+that removal is absent~\cite{EbertPanchal1997,Wilson24052017}.
+The mechanistic readings have been debated---asymptotic data need not imply
+removal~\cite{Epstein1983}, suppression and removal are indistinguishable
+during growth~\cite{Diaz-Bejarano24052017}, and likelihood comparison can
+select the wrong increment law~\cite{ZhangRevie2016}---but mostly through
+counterexamples and case studies, not a general statement of what a record
+can identify.
+
+We show in this study that, under very general conditions, 
+the classical laws are universal first-moment consequences of additive deposition processes.
+If deposition increments are stationary,
+independent and non-negative, the deposit is a L\'evy subordinator and the two
+classical laws are first-moment identities: the mean depends only on the net
+deposition and removal rates, for every additive mechanism. The statement
+follows directly from the linearity of expectation, but its consequences are
+not obvious. The information absent
+from the mean lies in the fluctuations and is unequally accessible: removal
+mechanisms separate in a plateau variance that survives as the deposition
+becomes smooth, whereas the increment law separates only in higher cumulants
+that measurement noise attenuates, turning the noise-free sample size of
+model selection~\cite{ZhangRevie2016} into a record length that grows as the
+fourth power of the noise. The dependence of the rate on operating conditions
+remains the proper object of mechanistic modelling, but it cannot be inferred
+from a single record at a single operating point.
+Section~\ref{sec:implications} translates these results into what an
+operator can and cannot conclude from a monitored fouling resistance.
+
+\begin{figure}[tb]
+\centering
+\resizebox{65mm}{!}{%
+\begin{tikzpicture}[scale=1.0, every node/.style={font=\large}]
+  \draw[-{Latex[length=2mm]}] (0,0) -- (7.6,0) node[right] {$t$};
+  \draw[-{Latex[length=2mm]}] (0,0) -- (0,5.2) node[above] {$R$};
+
+  \def\Rinf{4.2}
+  \def\tauKS{1.6}
+  \def\ti{0.8}
+  \draw[thick, oiblue] (0,0) -- (\ti,0);
+  \draw[thick, oiblue, domain=\ti:7.4, samples=120, smooth]
+    plot (\x, {\Rinf*(1-exp(-(\x-\ti)/\tauKS))});
+  \draw[dashed, oiblue!50] (0,\Rinf) -- (7.6,\Rinf);
+  \node[oiblue, anchor=west] at (7.5,\Rinf+0.15) {$R_\infty$};
+
+  \def\REP{0.15}         % tiny residual noise-level resistance during induction
+  \def\slopeEP{0.62}
+  \draw[thick, oiverm] (0,\REP) -- (\ti,\REP);
+  \draw[thick, oiverm, domain=\ti:7.4, samples=2]
+    plot (\x, {\REP + \slopeEP*(\x-\ti)});
+  \draw[densely dotted, gray] (\ti,0) -- (\ti,\REP+0.05);
+  \node[gray, below] at (\ti,0) {$t_i$};
+
+  \draw[thick, oiblue] (4.3,1.1) -- (4.9,1.1);
+  \node[anchor=west] at (4.95,1.1) {Kern--Seaton (asymptotic)};
+  \draw[thick, oiverm] (4.3,0.55) -- (4.9,0.55);
+  \node[anchor=west] at (4.95,0.55) {Ebert--Panchal (threshold)};
+\end{tikzpicture}%
+}
+\caption{Prototypical fouling-resistance trajectories. Both laws show
+an induction period $t_i$ before the resistance grows, 
+after which the Kern--Seaton law saturates to a plateau
+$R_\infty$ at a rate set by the removal process, while the Ebert--Panchal
+law grows approximately linearly once the deposition term dominates.}
+\label{fig:models}
+\end{figure}
+
+
+\section{Framework and deterministic reference models}
+\label{sec:theory}
+
+Fouling denotes the accumulation or growth of unwanted material on a
+surface \cite{Epstein1983,Bott1995,AugustinMeloWilson2025}. We describe the
+state of a fouled surface by a nonnegative fouling measure $R(t)$, which is
+kept generic throughout the theory. Its principal application here is the
+thermal fouling resistance of a heat exchanger,
+$R=1/U-1/U_{\mathrm{clean}}$,
+where $U$ is the overall heat-transfer coefficient. 
+For a homogeneous deposit of thickness $\delta$
+and thermal conductivity $k_f$ this is proportional to the deposit 
+thickness $R=\delta/k_f$. 
+
+This framework describes deposition under approximately stationary operating
+conditions in which the deposit does not feed back on the process that creates
+it. Specifically, we assume that (i)~the variables that set the deposition rate
+(flow, wall shear stress, film temperature, foulant concentration) are constant
+in time and uniform over the surface, so that $R$ is an area-averaged scalar;
+(ii)~the deposit does not appreciably change these variables, i.e.\ the loss of
+flow cross-section and the resulting changes in wall shear stress and interface
+temperature are negligible, such feedback being one route to an
+asymptotic record~\cite{Rehman2023}; (iii)~$R$ is additive in the deposited material, so
+that ageing, consolidation, and roughness effects that change $R$ at fixed
+deposited mass are neglected \cite{Crittenden1988,Ishiyama2011}; and (iv)~removal, where present, is a
+deterministic function of the state.
+Removal \emph{triggered by the deposit state itself} (e.g.\ thickness-dependent
+spalling) is not treated; Poisson-timed removal of a fixed fraction
+is (Sec.~\ref{sec:removal_sloughing}). 
+Additivity~(iii) and the absence of feedback~(ii) are what make the mean
+independent of mechanism; when (i)--(iv) fail, the net rate depends on the
+state and the mean laws of Table~\ref{tab:removal} no longer hold in general,
+as shown for nonlinear removal in Sec.~\ref{sec:removal_nonlinear}.
+
+%------------------------------------------------------------------
+\subsection{Deterministic fouling models}
+\label{sec:deterministic_models}
+
+Fouling is conventionally modeled as a balance between the deposition and
+removal of material,
+\begin{equation}
+  \frac{dR}{dt}=\dot R_{\mathrm d}-\dot R_{\mathrm r},
+  \label{eq:deterministic_mass_balance}
+\end{equation}
+where $\dot R_{\mathrm d}$ and $\dot R_{\mathrm r}$ are the deposition and
+removal rates in units of $R$ per unit time. Depending on the relative
+importance of deposition, adhesion, erosion, and detachment, observed
+fouling curves may be approximately linear, asymptotic, falling-rate, or irregular 
+\cite{Bott1995, AugustinMeloWilson2025}. 
+Two prototypical 
+deterministic models used in the industry may 
+provide useful reference limits: the asymptotic
+(Kern--Seaton) model \cite{KernSeaton1959} 
+and the linear (Ebert--Panchal) model
+\cite{EbertPanchal1997}.
+
+\paragraph*{Kern--Seaton.}
+Deposition is proportional to the fluid velocity
+$u$ and to the foulant concentration $C$, 
+whereas removal grows with the wall
+shear stress $\tau_w$ and with the amount of material already deposited. For particulate fouling, this reads as
+\begin{equation}
+  \dot R_{\mathrm d}=k_d\,uC,\qquad \dot R_{\mathrm r}=k_r\,\tau_w R,
+  \label{eq:kern_seaton_rates}
+\end{equation}
+where $k_d$ and $k_r$ are effective rate coefficients. The clean-surface
+deposition rate $m=k_d\,uC$ may be interpreted as a mass-transfer-controlled
+capture rate of classical filtration theory under particulate-fouling
+assumptions, multiplied by an attachment efficiency
+\cite{Yao1971,Epstein1988}; deposition--removal models of this form for
+particulate and crystallisation fouling are developed in 
+Refs.~\cite{Bohnet1987,Kostoglou1998} and have been a staple of fouling modeling 
+in the industry.
+The removal law
+assumes that $R$ is proportional to the deposited mass, and in fully
+turbulent flow the wall shear stress is approximately proportional to $u^{2}$,
+so that under stationary conditions 
+\begin{equation}
+  \frac{dR}{dt}=m-\psi R,
+\end{equation}
+with $m=k_d\,uC$ and
+$\psi=k_r'u^{2}$, where $k_r'$ is $k_r$ multiplied by the constant of
+proportionality between $\tau_w$ and $u^{2}$. The fouling resistance then rises monotonically to the
+plateau $R_\infty=m/\psi$ with time constant
+$\psi^{-1}$~\cite{KernSeaton1959,MullerSteinhagen2011}, and because removal is
+proportional to $R$ the state cannot become negative.
+
+\paragraph*{Ebert--Panchal.} 
+In this family of models the net fouling rate is the 
+difference between
+a thermally activated deposition contribution and a shear-dependent 
+removal contribution \cite{Wilson24052017}. 
+Following the original derivation
+\begin{equation}
+  \frac{dR}{dt}=\underbrace{a\,\mathrm{Re}^{b}\exp\!\Bigl(-\frac{E_a}{R_gT_f}\Bigr)}_{\displaystyle m}
+  -\gamma\tau_w\;\equiv\;K_{\mathrm{EP}} .
+  \label{eq:ebert_panchal_rate}
+\end{equation}
+Here $E_a$ is the activation energy per mole, $R_g$ the gas constant,
+$T_f$ the film temperature, and $a$, $b$, $\gamma$ are empirical 
+parameters.
+The second term is interpreted as either a removal or suppression of the
+deposition rate, and it reduces the rate of sticking, \emph{i.e.} 
+the increase of $R$ even without any removal mechanism 
+\cite{EP5,Diaz-Bejarano24052017}. 
+The rate is accordingly clipped at zero,
+$dR/dt=\max(K_{\mathrm{EP}},0)$, so that $R$ never decreases.
+In the stochastic description of Sec.~\ref{sec:stochastic_formulation}
+the two readings of the second term are no longer equivalent. Read as
+\emph{suppression}, $\gamma\tau_w$ lowers the fraction of arriving material
+that sticks; this is a thinning of the deposition process
+(Sec.~\ref{sec:removal_summary}, Eq.~\eqref{eq:thinning}).
+Read as \emph{erosion}, it is a constant removal rate
+$g(R)=\gamma\tau_w$ acting between deposition events, so that the path
+decreases during quiescent stretches and can reach $R=0$, where it must be
+held. The two readings share the linear mean but not the variance, and the
+erosion reading is exact only away from the wall
+(Table~\ref{tab:removal}).
+
+Several further models have been built on this basis
+\cite{EP4,EP6,EP3,EP2,EP1}, and in all of them $m$ and the suppression rate
+$\gamma\tau_w$ are time-independent under stationary conditions, so that $R$
+grows linearly at the net rate $K_{\mathrm{EP}}$; the condition
+$K_{\mathrm{EP}}>0$ defines the net-fouling regime, and below it no net
+accumulation is predicted. Both models are instances of $dR/dt=m-g(R)$ with
+the same deposition rate $m$ and different removal laws $g$, and both mean
+trajectories are collected in Table~\ref{tab:removal}.
+
+\begin{table*}[tb]
+\caption{Deterministic fouling laws, and the
+first two cumulants of the fouling state $R(t)$ when the deposition is a
+subordinator with mean rate $m$ and variance rate $s^2=c^2m^2\tau_0$, starting
+from $R(0)=R_0$.}
+\label{tab:removal}
+\small
+\begin{tabular}{lllll}
+\toprule
+Removal law $g(R)$ & Deterministic law &  $\mathbb E[R(t)]$ &  $\mathrm{Var}[R(t)]$ & Closure \\
+\midrule
+$0$ & pure deposition & $R_0+mt$ & $s^2\,t$ & exact \\
+$\gamma\tau_w$ (constant) & Ebert--Panchal & $R_0+(m-\gamma\tau_w)\,t$ & $s^2\,t$ & see note$^{a}$ \\
+$\psi R$ (linear) & Kern--Seaton & $R_0e^{-\psi t}+R_\infty\bigl(1-e^{-\psi t}\bigr)$ & $\dfrac{s^2}{2\psi}\bigl(1-e^{-2\psi t}\bigr)$ & exact \\
+\bottomrule
+\end{tabular}
+
+\vspace{3pt}\footnotesize\noindent$^{a}$\,Erosion reading, $g(R)=\gamma\tau_w$ for $R>0$; a
+reflection at $R=0$ keeps $R\ge0$. The tabulated cumulants are exact while
+$t<R_0/(\gamma\tau_w)$ and, in the net-fouling regime $m>\gamma\tau_w$,
+acquire only bounded corrections once the wall is reached. Under the
+suppression (thinning) reading, $g=0$ and $p=1-\gamma\tau_w/m$ in
+Eq.~\eqref{eq:thinning}, the mean is the same and exact, and the variance is
+$p\,s^2\,t$.
+\end{table*}
+
+%------------------------------------------------------------------
+\section{Stochastic formulation of linear fouling models}
+\label{sec:stochastic_formulation}
+
+The deterministic models describe mean trajectories under fixed operating
+conditions. They do not determine the variability among nominally identical
+campaigns, the intermittency of deposition events, or the uncertainty in the
+time needed to reach a prescribed fouling threshold. The same mean
+trajectory may arise from frequent small deposition events or from rare,
+comparatively large bursts.
+
+To represent this unresolved variability we keep the accumulation--removal
+structure of Eq.~\eqref{eq:deterministic_mass_balance} but replace the
+smooth deposition increment by the increment of a non-negative stochastic
+process. Let $D(t)$ be the cumulative deposition, with $D(0)=0$, and let
+$g(R)$ be a deterministic, state-dependent removal rate. The system is then governed by the Langevin-type equation:
+\begin{equation}
+  dR(t)=dD(t)-g[R(t)]\,dt,\quad R(0)=R_0\ge0 .
+  \label{eq:stochastic_balance}
+\end{equation}
+
+The deposition $dD(t)$ acts as a non-negative noise, made of the deposition
+increments $D(t+\Delta)-D(t)$, i.e.\ the material accumulated in a window of
+duration $\Delta$, counteracted by the deterministic, state-dependent removal
+term $g[R(t)]$. Under stationary operating conditions we make three
+assumptions:
+\begin{enumerate}
+  \item[(a)] \textit{Stationarity.} The distribution of an increment depends
+    on the window length $\Delta$, but not on the time at which the window
+    begins.
+  \item[(b)] \textit{Independence.} Deposition increments over
+    non-overlapping windows are independent.
+  \item[(c)] \textit{Non-negativity.} Deposition increments are nonnegative,
+    so $D(t)$ cannot decrease.
+\end{enumerate}
+Together with $D(0)=0$ and stochastic continuity, assumptions (a)--(c) make
+$D(t)$ a L\'evy process. We take its
+deterministic drift to be zero, so that all deposition occurs through events,
+however small, making the process a \emph{subordinator}~\cite{Sato1999,Applebaum2009}.
+Two kinds of subordinator exist, distinguished by the total mass of the
+L\'evy measure, $\nu(\dd x)$, which we call the \emph{activity}:
+\begin{itemize}
+  \item \emph{finite activity}, $r=\int\nu(\dd x)<\infty$: a finite number of events per period, with possibly long quiet intervals in which nothing deposits (bursty, intermittent fouling);
+  \item \emph{infinite activity}, $r=\int\nu(\dd x)=\infty$: infinitely many ever-smaller events in any interval, so the deposit strictly increases over every window almost surely; the sample paths remain discontinuous (pure-jump) despite this (gradual fouling).
+\end{itemize}
+The L\'evy measure fixes the whole process through the L\'evy--Khintchine
+formula~\cite{Sato1999,Applebaum2009}; in particular, by Campbell's
+theorem~\cite{Campbell1909}, the cumulants of $D(t)$ are proportional to $t$,
+\begin{equation}
+  \kappa_n[D(t)]=q_n\,t,\qquad q_n=\int_0^\infty x^n\,\nu(dx),
+  \label{eq:cumulant_rates}
+\end{equation}
+with
+\begin{align}
+  \kappa_1[D(t)]=\mathbb E[D(t)]&=m\,t, \qquad m=q_1, \label{eq:deposition_mean}\\
+  \kappa_2[D(t)]=\operatorname{Var}[D(t)]&=s^2\,t, \qquad s^2=q_2, \label{eq:deposition_variance_rate}
+\end{align}
+where $m$ is the mean deposition rate and $s^2$ the variance rate. Taking
+the expectation of Eq.~\eqref{eq:stochastic_balance} then gives
+$d\,\mathbb E[R]/dt=m-\mathbb E[g(R)]$, which for absent, constant or linear
+$g$ closes into the mean laws of Table~\ref{tab:removal} whatever the L\'evy
+measure. The
+variance rate and the mean rate have different dimensions, so the relative
+irregularity of the deposition must be referred to a time window. For a fixed
+reference window $\tau_0$ we define the coefficient of variation ($c$ or CV)
+of the accumulated deposition as
+\begin{equation}
+  c\equiv c(\tau_0),\qquad
+  c(\Delta)^2=\frac{\operatorname{Var}[D(\Delta)]}{\mathbb E[D(\Delta)]^2}
+  =\frac{s^2}{m^2\Delta},
+  \label{eq:cv_reference_interval}
+\end{equation}
+so that
+\begin{equation}
+\begin{gathered}
+  s^2=c^2m^2\tau_0,\qquad
+  \operatorname{Var}[D(t)]=c^2m^2\tau_0\,t,\\[2pt]
+  c(\Delta)=c\sqrt{\tau_0/\Delta}.
+\end{gathered}
+  \label{eq:deposition_variance}
+\end{equation}
+The CV therefore depends on the temporal resolution and decreases as windows
+are aggregated. Operationally, $\tau_0$ is set by the record itself---the
+native interval at which $R(t)$ is sampled or reported---while $\Delta=k\tau_0$
+for integer $k$ is any coarser window obtained by aggregating $k$ successive
+periods to suppress noise. The choice of $\tau_0$ is a convention; the physical content is
+the time $t_c=s^2/m^2=c^2\tau_0$, which is independent of $\tau_0$ and
+equals the mean time needed to deposit one size-biased event (Sec.~\ref{sec:activity}).
+The parameter $m$ sets how fast fouling accumulates on average, whereas $c$
+measures the relative irregularity of deposition over the chosen reference
+window. The value $c=2$ used in most examples is illustrative, chosen
+large enough to make the differences between the deposition laws visible.
+Order-unity values require spatially coherent fluctuations of the deposition;
+granular arrivals alone give far smaller values
+(Sec.~\ref{sec:variance_test}). The deterministic models of Sec.~\ref{sec:theory} are recovered in
+the limit $t_c\to0$ (equivalently $c\to0$ at fixed $m$), in which
+fluctuations vanish relative to the mean and $R(t)$ reduces to the smooth
+trajectories of Table~\ref{tab:removal}.
+The third and fourth cumulants give the \emph{skewness} $\gamma_1=\kappa_3/\kappa_2^{3/2}$ and the
+\emph{excess kurtosis} $\gamma_2=\kappa_4/\kappa_2^2$,
+all referring to the deposit in one sampling period.
+Since $\kappa_n[D(\Delta)]=q_n\Delta$, the standardized cumulant of order $n$
+decays as $\Delta^{1-n/2}$ under aggregation, with an exponent that does not
+depend on the L\'evy measure.
+ 
+
+
+%---------------------------------------------------------------------
+
+\subsection{Event spectrum and effective number of events}
+\label{sec:activity}
+ 
+Under assumptions (a)--(c) the deposition is a superposition of effective
+events, each adding a positive amount of size $x$ to $R$ 
+(the attachment of a particle of foulant), which need not
+be resolved individually. 
+Events of each size occur as independent Poisson
+processes with rate density $\nu(x)$, so that a
+size class $x$ contributes $x\,\nu(x)\,dx$ to the mean 
+deposition rate and
+$x^2\nu(x)\,dx$ to its variance rate. From 
+Eq.~\eqref{eq:cumulant_rates} then follows that the fluctuations
+(higher order cumulants) are dominated by the larger events.
+ 
+The activity (Sec.~\ref{sec:stochastic_formulation})
+separates two regimes. For finite $r$ the process is a compound
+Poisson process (Supplementary Material,
+Sec.~S2).
+Deposition occurs at random times and with random magnitude.
+It is bursty, with quiescent
+periods that are in principle observable.
+Only finitely many events occur in
+a finite interval, and the increment $\Delta D=D(t+\Delta)-D(t)$ vanishes with
+probability $\Pr(\Delta D=0)=e^{-r\Delta}$.
+For $r=\infty$ instead, infinitely many
+arbitrarily small events occur in every interval and
+$\Delta D>0$ almost surely
+for every $\Delta>0$. Deposition is then gradual, but it can still be intermittent,
+because most of the deposited mass may be carried by a few large events. Since
+$D$ is nondecreasing, its paths have finite variation in both cases, and the
+model contains no Gaussian component.
+The distribution of the deposited mass over event sizes is described by the
+mass spectrum $w(x)=x\,\nu(x)/m$, the fraction of the deposit carried by events
+of size $x$. Its mean,
+\begin{equation}
+  \ell=\int_0^\infty x\,w(x)\,dx=\frac{q_2}{q_1}=\frac{s^2}{m}=m\,t_c ,
+  \label{eq:ell}
+\end{equation}
+is the size-biased event size, i.e.\ the mean size of the event that deposits a
+given unit of $R$ (denoted $\ell$ to distinguish it from the process $D(t)$).
+It has the dimension of $R$, does not depend on $\Delta$, and differs from the
+mean event size $\int x\,\nu\,dx\big/\!\int\nu\,dx$, which is dominated by the
+numerous small events. The squared coefficient of variation over a window $\Delta$
+is then
+\begin{equation}
+  c(\Delta)^2=\frac{\ell}{m\Delta}=\frac{1}{N_{\mathrm{eff}}(\Delta)},\qquad
+  N_{\mathrm{eff}}(\Delta)=\frac{m\Delta}{\ell},
+  \label{eq:neff}
+\end{equation}
+where $N_{\mathrm{eff}}$ is the number of size-biased events contained in the
+mean deposit $m\Delta$; equivalently $N_{\mathrm{eff}}=\Delta/t_c$, the time
+$t_c$ named in Sec.~\ref{sec:stochastic_formulation} and now given
+explicitly as $t_c=\ell/m$. The irregularity of the deposition is thus the inverse
+of the effective number of events.
+For $N_{\mathrm{eff}}\lesssim1$ it is lumpy, with quiescent periods if
+$r$ is finite and with intermittent gradual growth if $r$ is infinite and a few large
+events carry most of the mass.
+Instead, for
+$N_{\mathrm{eff}}\gg1$ the deposit in a window is Gaussian irrespective of the
+activity, as a consequence of the central limit theorem: provided the
+cumulant rate $q_2$ is finite, 
+the standardized higher cumulants $\gamma_i$
+tend to zero as $N_{\mathrm{eff}}$ increases.
+
+
+%---------------------------------------------------------------------
+\subsection{Tempered-stable family of event spectra}
+\label{sec:tempered}
+
+A pure-jump deposition process is specified by the spectrum of its events. 
+We use a tempered-stable L\'evy subordinator form
+\begin{equation}
+  \nu(dx)=B\,x^{-1-\alpha}e^{-\lambda x}\,dx,\qquad x>0,\quad\alpha<1 .
+    \label{eq:tempered_stable}
+\end{equation}
+The power-law factor controls the relative occurrence of small and large
+events, and the exponential factor imposes a maximum event size of order
+$\lambda^{-1}$, which makes all moments finite (see Ref.~\cite{Rosinski2007}
+for the general theory of tempering). The cutoff may represent, for example, a
+maximum cluster or flake size that can form or attach 
+and in the following $\alpha$ is used as a statistical shape
+parameter. The condition $\alpha<1$ ensures a finite mean deposition rate.
+
+Given $m$ and $c$, the two scale parameters $B$ and $\lambda$ are fixed for
+any $\alpha$; in particular the cutoff is $\lambda=(1-\alpha)/\ell$
+(Supplementary Material, Sec.~S3). The family therefore has the same mean and
+variance rates for all $\alpha$, and the standardized skewness and excess
+kurtosis over a window $\Delta$ are
+\begin{equation}
+\begin{aligned}
+  \gamma_1(\Delta)&=\frac{2-\alpha}{1-\alpha}\,c(\Delta), \\
+  \gamma_2(\Delta)&=\frac{(2-\alpha)(3-\alpha)}{(1-\alpha)^2}\,c(\Delta)^2, \\
+  c(\Delta)&=c\sqrt{\tau_0/\Delta}.
+\end{aligned}
+\label{eq:aggregation_scaling}
+\end{equation}
+The prefactor $(2-\alpha)/(1-\alpha)$ is the variance power of the
+Tweedie exponential-dispersion family, to which these laws belong
+\cite{Jorgensen1987,Hougaard1986}.
+
+The parameter $\alpha$ has a direct physical reading. The mass-weighted
+spectrum of the family $w(x)$
+is a Gamma density of shape $1-\alpha$ and rate
+$\lambda$,
+\begin{equation}
+  w(x)=\frac{\lambda^{1-\alpha}}{\Gamma(1-\alpha)}\,x^{-\alpha}e^{-\lambda x},
+  \label{eq:mass_spectrum}
+\end{equation}
+with mean $\ell$ for every $\alpha$ and relative width $(1-\alpha)^{-1/2}$. At
+fixed $m$ and $c$, $\alpha$ therefore controls how the deposit is distributed
+over event sizes. For $\alpha\to-\infty$ all events have the same size
+$\ell$, and deposition is a Poisson process of equal events; as $\alpha$
+increases, the deposit is carried by an increasingly broad range of sizes,
+with more of it in rare large events and, at the same time, in very small
+ones. Since the mean and the variance are unchanged, this broadening shows up
+only from the third cumulant onwards, and never lowers the
+skewness below $c(\Delta)$, a bound that holds for every subordinator
+(Supplementary Material, Sec.~S3).
+
+
+\begin{table*}[tb]
+\caption{The three deposition laws as members of the tempered-stable family,
+Eq.~\eqref{eq:tempered_stable}, at common $m$, $c$ and $\tau_0$; $\ell=c^2m\tau_0$.
+Skewness and excess kurtosis over a window $\Delta$ follow from
+Eq.~\eqref{eq:aggregation_scaling}: $\gamma_1=(\gamma_1/c)\,c(\Delta)$ and
+$\gamma_2=(\gamma_2/c^2)\,c(\Delta)^2$.}
+\label{tab:three_laws}
+\begin{tabular}{lllp{4.2cm}ccc}
+\toprule
+$\alpha$ & Law & Activity & Event picture & $\Pr(\Delta D=0)$ & $\gamma_1/c$ & $\gamma_2/c^2$ \\
+\midrule
+$-1$ & compound Poisson & finite & discrete events, exponential sizes of mean $\ell/2$ & $e^{-2\Delta/t_c}$ & $3/2$ & $3$ \\
+$0$ & Gamma & infinite & dense small events, exponential mass spectrum & $0$ & $2$ & $6$ \\
+$1/2$ & inverse Gaussian & infinite & dense small events, broader mass spectrum & $0$ & $3$ & $15$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+%---------------------------------------------------------------------
+\subsection{The three deposition laws}
+\label{sec:three_laws}
+
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{Figures/fig02_event_spectrum_6panel.pdf}
+\caption{Event spectrum, mass spectrum and sample paths for the three laws of
+Table~\ref{tab:three_laws} at matched $m$, $c=2$ and $\tau_0$.
+(a)~Event-count spectrum $\nu(x)$ of the compound-Poisson law, with its
+exponential jump law of mean $\beta=\lambda^{-1}=\ell/2$. (b)~The same for the two
+infinite-activity laws; not normalizable. 
+(c)~Mass spectrum $w(x)=x\,\nu(x)/m$,
+with the common size-biased mean $\ell$ (dashed). (d)--(f)~One path of each
+law with the mean $mt$ and its $\pm2\sigma$ band; only compound Poisson~(d)
+shows quiescent stretches.}
+\label{fig:paths}
+\end{figure*}
+
+Three values of $\alpha$ reproduce the standard processes used to model
+particulate deposition (Table~\ref{tab:three_laws}); their explicit increment
+distributions are given in the Supplementary Material, Sec.~S3.
+They differ only in
+activity and in the breadth of the event-size spectrum. Compound Poisson
+($\alpha=-1$) is the only finite-activity member, depositing discrete events of
+mean size $\ell/2$ at rate $2/t_c$ and so admitting quiescent periods of
+probability $e^{-r\Delta}$; any $\alpha<0$ is the same process with
+Gamma-distributed event sizes (Supplementary Material, Sec.~S3). 
+Gamma ($\alpha=0$) is its limit of increasingly
+frequent and increasingly weak events, in which attachment of fine particles,
+changes of contact area, pore filling and cluster growth cannot be told
+apart~\cite{AbdelHameed1975,LawlessCrowder2004,vanNoortwijk2009}, and inverse
+Gaussian ($\alpha=1/2$) differs from Gamma only in carrying a broader spectrum.
+All three are standard reliability models of monotone degradation, originating
+in shock-and-wear models~\cite{Esary1973}, developed in detail for the
+inverse-Gaussian case~\cite{WangXu2010,YeChen2014,YeXie2015,Si2011,Kahle2016},
+long since unified within the class of L\'evy degradation
+processes~\cite{Cinlar1977,AbdelHameed1984,Shu2016}, and applied to heat-exchanger health~\cite{Collet2026}.
+
+The three laws should be viewed as alternative mesoscopic descriptions of
+deposition with identical mean and variance. As shown in
+Fig.~\ref{fig:paths}, their event-size distributions differ, but the mean
+and the variance of the deposit are the same by construction at every
+window. Only the higher-order cumulants, skewness and excess kurtosis, are
+sensitive to the event-size distribution, and their sample estimates
+converge to the analytical values of Table~\ref{tab:three_laws}
+(Supplementary Material, Sec.~S6).
+
+%---------------------------------------------------------------------
+\subsection{Aggregation and approach to Gaussian behavior}
+\label{sec:aggregation}
+
+Equation~\eqref{eq:aggregation_scaling} shows that aggregation acts on the
+three laws in the same way: the decay of the skewness and of the kurtosis with
+the window length has the same exponent for all of them, and $\alpha$ only
+changes the prefactor. The crossover window to Gaussian behavior, defined by
+$\gamma_1(\Delta_c)=1$, is
+\begin{equation}
+  \Delta_c=t_c\Bigl(\frac{2-\alpha}{1-\alpha}\Bigr)^{2}.
+  \label{eq:crossover_window}
+\end{equation}
+It is a crossover, not a sharp threshold, and it grows without bound
+as $\alpha\to1$: the broader the spectrum of event sizes, the more events are
+needed before the deposit looks Gaussian. For $\Delta\gg\Delta_c$ the three
+laws become increasingly difficult to distinguish on the basis of the
+shape of the increments alone, and the deposition
+is statistically a drift $m$ with Gaussian fluctuations of variance rate
+$s^2$: this is the central limit theorem for the underlying random walk, 
+with $N_{\mathrm{eff}}=\Delta/t_c$ playing the role of
+the number of summands, and Eq.~\eqref{eq:aggregation_scaling} quantifies
+the decay of the leading non-Gaussian cumulants.
+
+\section{Removal: fluctuations, intermittency and the limits of closure}
+\label{sec:removal}
+
+Section~\ref{sec:stochastic_formulation} showed that, for absent, constant
+or linear removal, the mean
+fouling curve does not depend on the statistics of the deposition. Here we ask
+what removal does to the \emph{fluctuations}, whether two removal mechanisms
+with the same mean trajectory can be told apart, and when the closure of the
+mean fails.
+
+%---------------------------------------------------------------------
+\subsection{Linear removal: a L\'evy-driven Ornstein--Uhlenbeck process}
+\label{sec:removal_linear}
+
+Solving Eq.~\eqref{eq:stochastic_balance} with $g=\psi R$
+gives
+\begin{equation}
+  R(t)=R_0e^{-\psi t}+\int_0^t e^{-\psi(t-u)}\,dD(u),
+  \label{eq:ou_solution}
+\end{equation}
+a superposition of deposition events, each decaying exponentially over the
+removal time $\psi^{-1}$. This is a shot-noise process and, in the language of
+stochastic processes, a L\'evy-driven Ornstein--Uhlenbeck process
+\cite{Sato1999,BarndorffNielsenShephard2001}.
+Since the removal kernel is
+linear, the cumulants of $R$ follow from those of $D$:
+\begin{equation}
+  \kappa_n[R(t)]=q_n\,\frac{1-e^{-n\psi t}}{n\psi}\qquad(n\ge2),
+  \label{eq:ou_cumulants}
+\end{equation}
+while the mean is given in Table~\ref{tab:removal}. All cumulants therefore
+saturate, and the plateau is characterized by:
+\begin{equation}
+\begin{aligned}
+  \mathbb E[R]_\infty&=R_\infty=\frac m\psi, &\qquad
+  \operatorname{Var}[R]_\infty&=\frac{s^2}{2\psi},\\[2pt]
+  \mathrm{CV}_\infty^2&=\frac{\psi t_c}{2}=\frac1{2N_\infty}, &\qquad
+  N_\infty&=\frac{R_\infty}{\ell},
+\end{aligned}
+\label{eq:plateau}
+\end{equation}
+where $N_\infty$ is the number of size-biased events held in the plateau
+deposit.
+
+Per-element detachment is a different mechanism: each deposited element
+survives an exponential time, then is removed \emph{entirely}---the usual
+reading of the Kern--Seaton time constant as a mean residence
+time~\cite{Shaikh2023}. It shares the mean $R_\infty=m/\psi$ but gives
+\begin{equation}
+  \kappa_n[R]_\infty=\frac{q_n}{\psi},
+  \label{eq:mginf_cumulants}
+\end{equation}
+against $q_n/(n\psi)$ under continuous removal,
+Eq.~\eqref{eq:ou_cumulants}. The difference lies in the fate of a single
+event of size $x$ deposited at time $u$. Continuous removal erodes it
+steadily, so that it contributes $x\,e^{-\psi(t-u)}$; per-element detachment
+leaves it intact until it goes, so that it contributes $x$ with probability
+$e^{-\psi(t-u)}$ and nothing otherwise. The two contributions have the same
+mean, but their $n$th powers average to $x^ne^{-n\psi(t-u)}$ and
+$x^ne^{-\psi(t-u)}$ respectively, and since the cumulants of a Poisson sum
+add these powers, every cumulant of order $n$ is $n$ times larger under
+detachment: the mean is unchanged and the variance doubled. Once standardized
+the factors nearly cancel: the plateau excess kurtosis is the same,
+$\gamma_2(\psi^{-1})$, and the skewness, $\gamma_1(\psi^{-1})$, exceeds the
+continuous-removal value by only $3/(2\sqrt2)\approx1.06$ (Supplementary
+Material, Sec.~S4). The factor $n$ requires each event to detach as
+a single unit: an event made of many sub-units detaching independently loses
+mass smoothly, as $x\,e^{-\psi(t-u)}$, and returns the continuous-removal
+cumulants.
+
+The plateau is thus built from $N_\infty=R_\infty/\ell$ size-biased events
+(Sec.~\ref{sec:activity}), and its relative fluctuations are $1/\sqrt{2N_\infty}$:
+a plateau that contains many events is regular, whereas one made of a few
+large events is not. The transient variance, $(s^2/2\psi)(1-e^{-2\psi t})$,
+grows as $s^2t$ (pure deposition) for $t\ll\psi^{-1}$ and saturates after a
+time of order $(2\psi)^{-1}$.
+
+For the tempered-stable family the stationary skewness and excess kurtosis
+under continuous linear removal are
+\begin{equation}
+\begin{aligned}
+  \gamma_{1,\infty}&=\frac43\,\frac{2-\alpha}{1-\alpha}\,\mathrm{CV}_\infty,\\
+  \gamma_{2,\infty}&=2\,\frac{(2-\alpha)(3-\alpha)}{(1-\alpha)^2}\,\mathrm{CV}_\infty^2,
+\end{aligned}
+  \label{eq:plateau_shape}
+\end{equation}
+equivalently
+\begin{equation}
+\gamma_{1,\infty}=\tfrac{2\sqrt2}{3}\gamma_1(\psi^{-1}), \qquad
+\gamma_{2,\infty}=\gamma_2(\psi^{-1}).
+\end{equation}
+The plateau has the shape of the
+deposit accumulated over one removal time, $\Delta=\psi^{-1}$
+(Supplementary Material, Sec.~S4).
+The pattern of Sec.~\ref{sec:tempered} therefore repeats one level up:
+$R_\infty$ and $\mathrm{Var}[R]_\infty$ are independent of $\alpha$, while
+$\gamma_{1,\infty}$ and $\gamma_{2,\infty}$ are not.
+
+What removal changes is how that distinguishing information behaves in time.
+Without removal the standardized cumulants decay indefinitely with the
+observation window, as $\Delta^{-1/2}$ and $\Delta^{-1}$, so the longer the
+deposit accumulates before being inspected the harder the three laws are to
+tell apart. Under linear removal $R(t)$ is built only from deposition of the
+last $\psi^{-1}$ or so, older material having been removed, and the effective
+window cannot grow past $\Delta\sim\psi^{-1}$ however long the process runs.
+The exact finite-time cumulants of Eq.~\eqref{eq:ou_cumulants} show this
+directly: $\gamma_1(t)$ and $\gamma_2(t)$ follow their no-removal decays while
+$t\ll\psi^{-1}$, then saturate at the values of
+Eq.~\eqref{eq:plateau_shape}. Removal does not erase the shape information the
+way further aggregation does; it freezes it at the value reached after about
+one relaxation time.
+Figure~\ref{fig:removal}(a)--(b) illustrates this directly: sample paths
+with the common mean and $\pm2\sigma$ band, and the exact skewness
+$\gamma_1(t)$ for each law (solid), which tracks the no-removal
+$t^{-1/2}$ decay (dashed) while $t\ll\psi^{-1}$ and bends over to the
+law-dependent plateau $\gamma_{1,\infty}$ once removal takes effect.
+
+%---------------------------------------------------------------------
+\subsection{Intermittent removal: sloughing}
+\label{sec:removal_sloughing}
+
+Continuous removal is not the only way to produce a plateau. Fouling layers
+may lose material in discrete events (sloughing, spalling, detachment of
+flakes)~\cite{Stewart1993,Bohn2007}. At the scale of a single particle the same
+structure arises from re-entrainment by turbulent bursts, each sweeping a fixed
+fraction of the wall and removing material that has not yet
+stabilised~\cite{Vatistas1988}. We model them as a Poisson process $N_s(t)$ of rate $r_s$, each event
+removing a fixed fraction $\eta\in(0,1]$ of the deposit,
+\begin{equation}
+  dR(t)=dD(t)-\eta\,R(t^-)\,dN_s(t).
+  \label{eq:sloughing}
+\end{equation}
+The rate and the fraction do not depend on the state of the deposit: removal is
+triggered by time, not by the thickness reached. (Thickness-triggered spalling
+is not treated here.) Averaging Eq.~\eqref{eq:sloughing} gives
+$d\,\mathbb E[R]/dt=m-r_s\eta\,\mathbb E[R]$, the same mean equation as for
+continuous removal, with $\psi=r_s\eta$. The mean trajectory, the plateau
+$R_\infty$ and the relaxation time cannot discriminate between the two
+mechanisms. The same holds for the two-point correlation: $\mathbb E[R(t+\tau)\,|\,R(t)]$ obeys the same linear
+equation in both cases, so the autocorrelation is again $e^{-\psi\tau}$.
+
+The fluctuations, however, differ. At equal mean and relaxation rate, the
+stationary variance under sloughing is
+\begin{equation}
+  \operatorname{Var}[R]_\infty
+  =\frac{s^2}{(2-\eta)\,\psi}+\frac{\eta}{2-\eta}\,R_\infty^2 ,
+  \label{eq:sloughing_variance}
+\end{equation}
+to be compared with $s^2/2\psi$ for continuous removal
+(Table~\ref{tab:plateau}). The second term does not depend on the deposition
+statistics: it is the sawtooth generated by the random timing of the removal
+events, and is present even if the deposition is perfectly smooth ($s=0$). Its
+relative size is $\eta/(2-\eta)$. In the limit of frequent small events,
+$\eta\to0$ at fixed $r_s\eta$, Eq.~\eqref{eq:sloughing_variance} reduces to
+the continuous result, as expected for erosion by many small detachments. For
+complete cleaning events ($\eta=1$), $\mathrm{CV}^2=\psi t_c+1\ge1$: the
+fluctuations are of the order of the mean itself. Figure~\ref{fig:removal}(c)--(d)
+compares one realization of each mechanism at matched mean and validates
+the stationary variance against $\eta$, Eq.~\eqref{eq:sloughing_variance},
+by Monte Carlo simulations. 
+The moment comparison between the two mechanisms is collected in the Supplementary Material, Sec.~S4.
+
+\begin{table*}[t]
+\caption{Plateau statistics for three removal mechanisms reaching the same
+plateau $R_\infty=m/\psi$ (for sloughing, $\psi=r_s\eta$); $t_c=s^2/m^2$. All
+three share the autocorrelation $e^{-\psi|\tau|}$. Only sloughing retains a non-vanishing
+plateau variance as the deposition becomes smooth, $c\to0$, because its second
+term does not contain $s^2$.}
+\label{tab:plateau}
+\begin{tabular}{lcccc}
+\toprule
+Mechanism & $R_\infty$ & $\operatorname{Var}[R]_\infty$ & $\mathrm{CV}_\infty^2$ & $\operatorname{Var}[R]_\infty$ as $c\to0$ \\
+\midrule
+proportional erosion (continuous) & $\dfrac m\psi$ & $\dfrac{s^2}{2\psi}$ & $\dfrac{\psi t_c}{2}$ & $0$ \\[2mm]
+per-element detachment & $\dfrac m\psi$ & $\dfrac{s^2}{\psi}$ & $\psi t_c$ & $0$ \\[2mm]
+intermittent removal (sloughing) & $\dfrac m\psi$ & $\dfrac{s^2}{(2-\eta)\psi}+\dfrac{\eta R_\infty^2}{2-\eta}$ & $\dfrac{\psi t_c+\eta}{2-\eta}$ & $\dfrac{\eta R_\infty^2}{2-\eta}$ \\[2mm]
+
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{Figures/fig03_removal}
+\caption{Fluctuations under removal ($m=1$, $c=1$, $\tau_0=1$, $\psi=0.2$,
+$R_\infty=5$). (a)~Sample paths of the L\'evy-driven Ornstein--Uhlenbeck
+process for the three laws, with the mean and the $\pm2\sigma(t)$ band.
+(b)~Exact skewness $\gamma_1(t)$ under removal (solid,
+Eq.~\eqref{eq:ou_cumulants}) and the no-removal $t^{-1/2}$ reference (dashed).
+(c)~One path each of continuous removal, per-element detachment, sloughing
+($\eta=0.5$, $r_s=\psi/\eta$) and independent-site blocking (equal events of
+size $\ell$), all with the same mean (dashed). (d)~Stationary variance against $\eta$ at
+fixed $\psi$, Eq.~\eqref{eq:sloughing_variance} (lines) and Monte Carlo
+(markers), for $c=1$ and $c=0.1$; dashed: the continuous-removal
+baselines $s^2/2\psi$ (logarithmic scale).}
+\label{fig:removal}
+\end{figure*}
+
+%---------------------------------------------------------------------
+\subsection{Nonlinear removal}
+\label{sec:removal_nonlinear}
+
+For a removal law $g(R)$ that is neither constant nor linear, the mean
+equation, which is still exact,
+\begin{equation}
+  \frac{d\mu}{dt}=m-\mathbb E[g(R)],\qquad\mu=\mathbb E[R],
+  \label{eq:nonlinear_mean}
+\end{equation}
+no longer closes: $\mathbb E[g(R)]\neq g(\mu)$, and the mean depends on the
+fluctuations. Expanding $g$ around $\mu$ gives, to second order,
+\begin{equation}
+  \frac{d\mu}{dt}\simeq m-g(\mu)-\tfrac12\,g''(\mu)\,V,\qquad
+  \frac{dV}{dt}\simeq s^2-2\,g'(\mu)\,V,
+  \label{eq:nonlinear_moments}
+\end{equation}
+with $V=\operatorname{Var}[R]$. The expansion is ordered in the relative
+event size $1/N_\infty=\ell/R_\infty$; the third-cumulant terms it neglects
+are smaller by a further factor $1/N_\infty$ (Supplementary Material,
+Sec.~S4). To this order the deposition law enters only through
+$s^2$, i.e.\ through $c$; the shape parameter $\alpha$ first appears
+through $\kappa_3[R]$ at the next order in $1/N_\infty$. If $g$
+is convex, fluctuations increase the mean removal rate and the mean fouling
+lies below the deterministic (mean-field) prediction; for concave $g$ the
+opposite holds. The universality of the mean is therefore lost, and the mean
+curve now carries information on $c$.
+
+The correction to the removal rate, $\tfrac12g''V/g\sim\mathrm{CV}^2\sim1/N_\infty$,
+is small when the plateau holds many events, where the closure becomes
+asymptotically exact, and the closure fails when it holds few.
+
+In real exchangers nonlinear dependence on the deposit
+arises, for instance, from the change of the flow cross-section and of the
+wall shear stress with the deposit thickness (condition~(ii) of Sec.~\ref{sec:theory}); such
+feedback also makes the deposition itself non-stationary, and lies outside the
+scope of this work.
+
+\paragraph*{Numerical verification.}
+Every analytic result of this and the following sections is checked against
+Monte Carlo simulation of Eq.~\eqref{eq:stochastic_balance}. Deposition
+increments are drawn exactly from the three laws of Table~\ref{tab:three_laws};
+continuous removal is applied as exponential decay over each step, sloughing
+as Poisson-timed events, per-element detachment exactly by thinning the alive
+deposit, and blocking by binomial filling of independent sites. Where a time
+step is needed it is $0.005$--$0.02\,\tau_0$; ensembles range from $10^3$
+records to $2\times10^5$ paths per law, with fixed seeds, and the code is
+available (Data Availability). The simulations reproduce the transient and
+stationary moments of Table~\ref{tab:plateau} to within sampling error, about
+$0.5\,\%$ for the stationary variances (Supplementary Material, Fig.~S2), the
+plateau skewness of Eq.~\eqref{eq:plateau_shape}, the record-length estimate
+of Sec.~\ref{sec:observability} (Fig.~S5) and the first-passage statistics of
+Sec.~\ref{sec:first_passage} (Fig.~S6).
+
+\section{Identifiability of the deposition mechanism}
+\label{sec:identifiability}
+%---------------------------------------------------------------------
+\subsection{What the mean cannot see}
+\label{sec:removal_summary}
+
+Linear removal and Poisson-timed sloughing, matched at $\psi=r_s\eta$, were
+shown in Sec.~\ref{sec:removal} to share one mean curve while their
+fluctuations remain distinguishable (Table~\ref{tab:plateau}).
+
+Both mechanisms assume that every particle reaching the wall sticks, whereas
+attachment efficiencies well below unity are the
+rule in particulate deposition~\cite{Yao1971,Epstein1988}, and the reaction-engineering treatment of fouling writes the deposition rate as a foulant production rate times a sticking probability~\cite{PatersonFryer1988}. Writing $p$ for the sticking probability, two cases separate. A constant $p$ thins the event-rate density,
+\begin{equation}
+  \nu\to p\,\nu,\qquad m\to p\,m,\qquad c^{2}\to c^{2}/p,
+  \label{eq:thinning}
+\end{equation}
+leaving $\ell$ and $\alpha$ unchanged: the tempered-stable family is closed
+under the operation, and the only effect is a scaled net rate---a linear
+mean curve of reduced slope, or, where linear removal is also present, the
+same exponential saturation to a proportionally lower plateau.
+This is the suppression reading of the Ebert--Panchal term
+(Sec.~\ref{sec:theory}): with $p=1-\gamma\tau_w/m$ the thinned process
+reproduces the linear mean of Table~\ref{tab:removal} exactly, without a
+boundary at $R=0$, and with a variance $p\,s^2\,t$ smaller than that
+of the erosion reading. If instead $p$
+falls as the surface fills, $p(R)=1-R/R_\infty$, the Langmuir blocking law of
+site-limited adsorption, the mechanism is not removal at all: nothing leaves
+the surface and attachment becomes self-limiting. Each increment then depends
+on how full the surface already is, so the process leaves the L\'evy class.
+We take the blocking to be independent-site filling, for which the mean closes
+exactly because $p$ is linear in $R$ and the variance vanishes at saturation;
+random sequential adsorption with excluded volume is a different process,
+approaching its jamming limit non-exponentially and retaining a variance
+proportional to the area, so the two are themselves distinguishable by the
+late-time scatter. The mean trajectory of independent-site blocking is
+nonetheless the same exponential saturation to $R_\infty$.
+
+Four mechanisms with nothing physically in common---continuous shear
+removal, per-element detachment, intermittent sloughing and self-limiting
+Langmuir adsorption---therefore reach the same saturating mean at matched net
+rate [Fig.~\ref{fig:removal}(c)], while constant attachment thinning rescales the linear branch without
+saturating it at all. Fitting an asymptotic curve returns $R_\infty$ and a
+time constant and says nothing about which of the four produced it: a
+Kern--Seaton fit is not evidence of shear removal.
+Table~\ref{tab:plateau} collects the three that settle to a stationary
+plateau; blocking is absent from it because its variance vanishes once the
+sites are full, leaving no stationary fluctuation. The same difficulty, of
+separating deposition, suppression, removal and consolidation in operating
+data, is known within the mechanistic literature~\cite{Diaz-Bejarano24052017}.
+
+The degeneracy is not even confined to the mechanism. Stationarity and a
+finite first moment already give $\mathbb{E}[D(t)]=mt$, since expectations
+add whether or not the increments are independent, and for a single record
+rather than an ensemble it is enough that the increment sequence be ergodic;
+independence is needed only from the second cumulant onward. A straight or
+saturating mean curve is therefore not evidence even of the L\'evy structure
+assumed in Sec.~\ref{sec:stochastic_formulation}. What such a curve identifies is the net mean
+rate and, under linear removal, the relaxation rate---and nothing beyond
+them.
+
+
+\subsection{Variance and the deposition law}
+\label{sec:variance_test}
+
+The three laws of Sec.~\ref{sec:three_laws} are matched in their first two
+cumulants by construction, so only the standardized third and fourth cumulants
+carry information about the increment law. What the variance can test is
+whether a \emph{granular} picture of deposition is quantitatively consistent at
+all.
+
+Suppose each attachment event is one particle of diameter $d_p$, depositing at solid
+fraction $\phi_s$, and that arrivals form a Poisson
+process. Averaged over the heat-transfer area $A$, a single attachment raises the fouling
+resistance by
+%
+\begin{equation}
+  J_1=\frac{\pi d_p^{3}/6}{A\,\phi_s\,k_f},
+  \qquad\text{whence}\qquad
+  c^{2}=\frac{J_1}{m\tau_0}.
+  \label{eq:shot_noise}
+\end{equation}
+%
+Equation~\eqref{eq:shot_noise} is not an external estimate: it is
+Eq.~\eqref{eq:neff} evaluated at $\Delta=\tau_0$ in the monodisperse limit
+$\alpha\to-\infty$ of the family, where every event deposits the same amount
+and the size-biased event size $\ell$ collapses onto the jump $J_1$ itself.
+Equivalently $c^{2}=1/(r\tau_0)$---the classical shot-noise result for Poisson-timed pulses of
+equal weight~\cite{Rice1944,Rice1945}. No parameter is free: once the event
+size is fixed, the mean rate fixes the event frequency through $r=m/J_1$. The
+derivation is given in the Supplementary Material, Sec.~S5.
+The resulting magnitudes are extreme. For an exchanger of $A=200~\mathrm{m^2}$
+fouling at a rate of order $10^{-5}~\mathrm{m^{2}\,K\,W^{-1}}$ per sampling period, with deposit
+properties $k_f\sim0.5~\mathrm{W\,m^{-1}K^{-1}}$ and $\phi_s\sim0.5$,
+Eq.~\eqref{eq:shot_noise} gives $c\sim10^{-9}$ for $0.1~\mu\mathrm{m}$ particles
+and $c\sim3\times10^{-5}$ at $100~\mu\mathrm{m}$. The transport mechanism
+is thus invisible in the mean, which sees only the net rate
+(Sec.~\ref{sec:removal_summary}), and invisible in the variance by smallness.
+
+The scaling behind those numbers is the general statement. Because $c^{2}\propto J_1\propto A^{-1}$
+at fixed mean rate, granular arrival noise is suppressed as $A^{-1/2}$ and attains order unity
+only on the scale of a single particle. The same square-root suppression governs the coverage of a deposited
+monolayer under random sequential adsorption, whose jamming count obeys a
+central limit theorem with variance proportional to the system
+size~\cite{Penrose2001,Loscar2003}. An area-averaged fouling resistance is therefore almost
+perfectly deterministic with respect to the granularity of deposition, and any observed
+coefficient of variation of order one must originate in a fluctuation that is coherent over a
+length comparable to the exchanger itself.
+
+That bound bears on assumption (b) of Sec.~\ref{sec:stochastic_formulation}: independent granular
+arrivals cannot produce $c$ of order unity without single events equivalent to a uniform layer
+several to tens of micrometres thick across the whole surface, which is not physical. A coherent fluctuation
+is required instead: operating-condition drift ($c\approx E_a\Delta T/(R_gT_f^2)\approx0.1$ for a 5~K film-temperature
+excursion at $E_a=50~\mathrm{kJ\,mol^{-1}}$, $T_f=500$~K), turbulent-burst intermittency in near-wall
+transport~\cite{Vatistas1988,Nakagawa1978,Miele2025}, or a coherent measurement error. The first
+two place the process outside the L\'evy class; the third leaves the subordinator description
+intact and makes the observed $c$ partly a sensor parameter.
+
+\subsection{Variance and the removal mechanism}
+\label{sec:variance_removal}
+
+For removal, linearising the variance equation gives
+$\dot V\simeq s^2-2\,g'(\mu)\,V$ (Eq.~\eqref{eq:nonlinear_moments}), so what
+matters is the \emph{slope} of the removal law at the operating point, not
+whether removal is present. Pure deposition and Ebert--Panchal removal both
+have $g'=0$ and therefore the same unbounded growth
+(Table~\ref{tab:removal}; under the suppression reading the variance rate
+is reduced by the factor $p$, but the growth remains unbounded); only
+$g'\neq0$ makes the variance informative.
+
+A saturating record is exactly the regime where the variance separates
+mechanisms the mean cannot: sloughing retains a floor
+$\eta R_\infty^2/(2-\eta)$ even as deposition becomes noise-free
+(Eq.~\eqref{eq:sloughing_variance}), while every $s^2$-proportional term---including
+per-element detachment's (Eq.~\eqref{eq:mginf_cumulants})---vanishes with $c$. At realistic $c$
+the question is therefore not whether the plateau variance exceeds a baseline but whether it
+fluctuates at all; blocking is separated from continuous removal
+instead by its time course: with independent-site filling the variance is
+$\ell R_\infty\,\theta(1-\theta)$ at coverage
+$\theta=\mathbb E[R]/R_\infty=1-p$, rising to a maximum $\ell R_\infty/4$
+at half coverage and returning to zero as the sites fill. The binomial
+form holds for sites of a single capacity, each filled by one event of size
+$J_1$, i.e.\ the monodisperse limit of Sec.~\ref{sec:variance_test} with
+$\ell=J_1$; for polydisperse events the intermediate-time variance depends on
+how events of different size share the sites, but it still vanishes as the
+surface saturates. That maximum is set
+by the event size, so unlike the sloughing floor it is a granular quantity and
+inherits the smallness of Sec.~\ref{sec:variance_test}.
+
+What this test costs is worth setting beside
+Sec.~\ref{sec:observability}. The sloughing floor is a fixed fraction of the
+plateau: at $\eta=\tfrac12$ it is $R_\infty^2/3$, so the discriminator asks
+only that the measurement noise stay below $R_\infty/\sqrt3$, under
+six-tenths of the plateau itself. What it does demand is duration, since the
+state decorrelates on the relaxation time and the plateau variance must
+therefore be estimated from a record spanning several multiples of
+$\psi^{-1}$. The contrast with the deposition law is not one of degree.
+Identifying the increment law needs both a better instrument and the record
+length of Eq.~\eqref{eq:Nreq}; identifying the removal mechanism needs a
+record that reaches its plateau and stays there.
+
+\subsection{Measurement noise: observability and record length}
+\label{sec:observability}
+
+Temporal aggregation preserves the mean rate and suppresses every standardized
+higher cumulant, Eq.~\eqref{eq:aggregation_scaling}: over a window $\Delta t$
+the coefficient of variation falls as $c\sqrt{\tau_0/\Delta t}$ and the
+skewness as $\gamma_1\sqrt{\tau_0/\Delta t}$. A smooth macroscopic fouling
+curve is therefore compatible with strongly intermittent event-scale
+deposition, and the question for a real record is whether any observation
+window is short enough to retain that shape and long enough to clear the
+measurement noise.
+
+Let the state be observed at intervals $\Delta t=k\tau_0$ as
+$Y_j=R(j\Delta t)+\varepsilon_j$ with
+$\varepsilon_j\overset{\mathrm{iid}}{\sim}\mathcal{N}(0,\sigma^2)$, and take
+disjoint increments $\Delta Y_j=Y_{2j+1}-Y_{2j}$ so that their measurement
+errors are independent. Then
+$\operatorname{Var}[\Delta Y_j]=c^2m^2\tau_0\Delta t+2\sigma^2$: the
+deposition variance grows with the window, the differenced noise does not, and
+everything that follows is governed by the single dimensionless group formed
+from the two,
+\begin{equation}
+  \rho=\frac{2\sigma^2}{c^2m^2\tau_0^{2}},
+  \label{eq:rho}
+\end{equation}
+the differenced noise variance divided by the deposition variance of one
+reference window; equivalently, $\rho$ is the window length $k$ at which the
+increment's signal-to-noise ratio $\mathrm{SNR}(k)=k/\rho$ reaches one, where
+deposition and noise contribute equally.
+
+Let $f=k/(k+\rho)=\mathrm{SNR}/(1+\mathrm{SNR})$ be the share of the observed
+variance that is deposition. Gaussian noise leaves every cumulant above the
+second unchanged and inflates $\kappa_2$ by $1/f$, so a standardized cumulant
+of order $n$, which carries $\kappa_2^{-n/2}$, is attenuated by exactly
+$f^{n/2}$:
+\begin{align}
+  \gamma_{1,k}&=\frac{\gamma_1}{\sqrt k}\,f^{3/2}
+              =\gamma_1\,\frac{k}{(k+\rho)^{3/2}},\notag\\
+  \gamma_{2,k}&=\frac{\gamma_2}{k}\,f^{2}
+              =\gamma_2\,\frac{k}{(k+\rho)^{2}},
+  \label{eq:attenuated_shape}
+\end{align}
+the first factor in each being the noise-free value at that window. The two
+pull against each other: $f^{n/2}$ rises towards one as the window clears the
+noise (noise masking) and can go no further, while the aggregation factor
+(aggregation masking) falls without bound.
+A bounded gain against an unbounded loss forces an interior maximum, at
+$k^\ast=2\rho$ and $k^\ast=\rho$ respectively, with maxima $(2/3\sqrt3)\,\gamma_1/\sqrt\rho$ and
+$\gamma_2/(4\rho)$, so that once $\rho\gg1$ no window reveals the shape of the
+law: any window long enough to clear the noise has already aggregated the
+shape away (Fig.~\ref{fig:observability}).
+
+Detecting the shape is a different optimization from preserving it.
+Each disjoint increment consumes $2k$ base periods, so a record of $N$
+periods supplies $n_w=N/(2k)$ independent windows, on which the sample
+skewness and sample excess kurtosis have standard errors $\sqrt{6/n_w}$ and
+$\sqrt{24/n_w}$ in the Gaussian limit $\rho\gg c^2$. We define the
+separability index $d'$ as the difference between the attenuated values of
+two laws, $\Delta\gamma_{1,k}$ or $\Delta\gamma_{2,k}$, in units of that
+standard error: the distance, in standard errors, between the estimate
+obtained under one law and the value expected under the other. A longer
+window retains more of the cumulant but leaves fewer independent windows in a
+record of fixed length, and the two effects balance at $k=\rho/2$ for the
+skewness and $k=\rho/3$ for the excess kurtosis---both shorter than the windows
+that maximize the cumulants themselves, and both requiring $\rho\gtrsim3$
+so that $k\ge1$. Requiring $d'=2$
+between the Gamma and inverse Gaussian laws ($\Delta\gamma_1=c$) at the
+better of the two statistics then demands a record of
+\begin{equation}
+  N\approx 324\,\frac{\rho^{2}}{c^{2}}
+  \label{eq:Nreq}
+\end{equation}
+periods (Supplementary Material, Sec.~S6). This pair is the
+easiest to separate; the Gamma and compound-Poisson laws differ by only
+$\Delta\gamma_1=c/2$ and need four times as long a record. The accounting is
+also conservative: when readings are available at every base period,
+windows need only be separated by one period to keep their endpoint errors
+independent, $n_w\simeq N/k$, which halves the prefactor, and using all
+consecutive increments with their known first-order moving-average error
+structure would gain a further constant factor. Neither changes the
+$\rho^{2}$ scaling. The skewness is the cheaper
+statistic by a factor $\rho/(14c^{2})$, so it, and not the excess kurtosis,
+sets the scaling of the requirement with the noise. Since the required record grows as the
+fourth power of the measurement noise,
+improving the instrument is by far the more effective route to the event-scale
+statistics.
+The estimate is asymptotic and specific to moment-based estimation,
+whereas the attenuation it rests on is not; its range of validity is given in
+the Supplementary Material, Sec.~S6.
+
+
+The numbers this implies can be estimated without reference to any particular
+record. A thermally reconstructed fouling resistance is inferred from
+temperature and flow measurements as a difference of reciprocals,
+$R_f=A\,(1/UA-1/UA_{\mathrm{clean}})$, so that a relative error $\epsilon$ in
+the inferred conductance gives an error $\epsilon/U$ in $R_f$, with $U=UA/A$. The
+deposition increment of one period changes the conductance by the relative
+amount $\zeta=U m\tau_0$, and Eq.~\eqref{eq:rho} becomes
+\begin{equation}
+  \rho=\frac{2}{c^{2}}\Bigl(\frac{\epsilon}{\zeta}\Bigr)^{2},
+  \qquad
+  N\approx\frac{1296}{c^{6}}\Bigl(\frac{\epsilon}{\zeta}\Bigr)^{4},
+  \label{eq:rho_generic}
+\end{equation}
+the second from Eq.~\eqref{eq:Nreq}. For an exchanger with
+$U\approx400~\mathrm{W\,m^{-2}K^{-1}}$ fouling by
+$10^{-5}~\mathrm{m^{2}\,K\,W^{-1}}$ per three-day period, $\zeta\approx0.4\,\%$:
+a conductance inferred to within $1\,\%$ already carries a noise comparable to
+several periods of deposition (consistent with reported uncertainties of
+$4.6\,\%$ for an industrial exchanger's overall
+coefficient~\cite{Fguiri2020} and resistances uncertain below about
+$10^{-5}~\mathrm{m^{2}\,K\,W^{-1}}$~\cite{Shen2015}).
+Table~\ref{tab:record_length} evaluates
+Eq.~\eqref{eq:rho_generic}. Only the combination of a conductance accurate to
+about one per cent and strongly bursty deposition, $c\approx2$, brings the
+requirement within years; at a few per cent, or for $c\lesssim1$ (the requirement
+scales as $c^{-6}$), it runs to centuries and beyond, and for the granular values of $c$ found in
+Sec.~\ref{sec:variance_test} it is unbounded for practical purposes. The
+estimate is, moreover, favorable on two counts: it counts only the error of
+the inferred conductance, not the property and heat-loss closures behind
+the duty or the use of a design rather than a measured clean conductance, and
+it assumes errors that average away rather than correlate in time. For
+thermally reconstructed resistances, where a conductance error of a few per
+cent already exceeds the deposition of several sampling periods, the
+increment law is thus, in practice, unobservable.
+
+\paragraph*{Measurement Uncertainty Effect.}
+The error $\epsilon$ follows from the reconstruction of the conductance. With
+$UA=Q/\Delta T_{\mathrm{lm}}$ and the duty $Q=\dot m c_p\,\Delta T$ taken from
+one stream, first-order propagation gives, neglecting correlations through
+shared sensors~\cite{Tatara2011,Shen2015},
+\begin{equation}
+  \epsilon^{2}\simeq\Bigl(\frac{\delta\dot m}{\dot m}\Bigr)^{2}
+  +\Bigl(\frac{\delta(\Delta T)}{\Delta T}\Bigr)^{2}
+  +\Bigl(\frac{\delta(\Delta T_{\mathrm{lm}})}{\Delta T_{\mathrm{lm}}}\Bigr)^{2}.
+  \label{eq:epsilon_propagation}
+\end{equation}
+Only the random part of each error enters. A calibration offset of a
+thermocouple or a flow meter is constant over the record and cancels in the
+increments on which every statistic of this section is built, so that
+$\epsilon$ is the precision error of a single reading: a better-calibrated
+instrument does not help, only a less noisy one does. For a stream heated by
+$\Delta T=20$~K, a log-mean temperature difference of $30$~K, a random
+thermocouple error of $0.1$~K and a random flow-meter error of $0.5\,\%$, the
+duty is uncertain to about $0.9\,\%$ and the log-mean difference to about
+$0.3\,\%$, so that $\epsilon\approx1\,\%$ and $\epsilon/\zeta\approx2.5$, the
+second row of Table~\ref{tab:record_length}. Averaging $n$ readings within a
+sampling period reduces $\epsilon$ by $\sqrt n$ only if their errors are
+independent; plant noise is usually correlated in time, and $\epsilon$ is
+then the error of the averaged reading.
+
+\begin{table}[tb]
+\caption{Record length, in years, required to separate the Gamma and
+inverse-Gaussian laws, Eq.~\eqref{eq:rho_generic}, against the relative error
+$\epsilon$ of the inferred conductance, for a relative conductance change
+$\zeta=0.4\,\%$ per sampling period $\tau_0=3$~days. The column
+$\epsilon/\zeta$ expresses the noise in periods of deposition. Down a column
+the requirement grows as $\epsilon^4$, across a row as $c^{-6}$.
+Entries marked $^\dagger$ have $\rho<c^{2}$, outside the asymptotic regime of
+Eq.~\eqref{eq:Nreq}, and are indicative only.}
+\label{tab:record_length}
+\vspace{4pt}\centering
+\begin{tabular}{@{}cc@{\hspace{10pt}}cccc@{}}
+\toprule
+ & & \multicolumn{4}{c}{record length (years)}\\
+\cmidrule(l){3-6}
+$\epsilon$ & $\epsilon/\zeta$ & $c=2$ & $c=1$ & $c=0.5$ & $c=0.1$\\
+\midrule
+$0.5\,\%$ & $1.25$ & $0.4^{\dagger}$ & $26$ & $2\times10^{3}$ & $3\times10^{7}$\\
+$1\,\%$ & $2.5$  & $6^{\dagger}$   & $4\times10^{2}$ & $3\times10^{4}$ & $4\times10^{8}$\\
+$2\,\%$ & $5$    & $1\times10^{2}$ & $7\times10^{3}$ & $4\times10^{5}$ & $7\times10^{9}$\\
+$3\,\%$ & $7.5$  & $5\times10^{2}$ & $3\times10^{4}$ & $2\times10^{6}$ & $3\times10^{10}$\\
+$5\,\%$ & $12.5$ & $4\times10^{3}$ & $3\times10^{5}$ & $2\times10^{7}$ & $3\times10^{11}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+The same competition between a noise floor at short lag and a degrading
+signal at long lag governs parameter estimation for noisy degradation and
+diffusion records generally~\cite{Whitmore1995,Bordes2015,Pulcini2016,Lanoiselee2018};
+what is specific here is that the quantity estimated is a standardized higher
+cumulant, which aggregation itself destroys, so the upper cutoff is a
+property of the process rather than of the record length.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=86mm]{Figures/fig04_observability}
+\caption{Observability is governed by the noise-to-signal ratio $\rho$ alone.
+The vertical axis is the attenuated skewness $\gamma_{1,k}$,
+Eq.~\eqref{eq:attenuated_shape}, normalized by its noise-free value
+$\gamma_1$, plotted against the aggregation window $k$ ($\rho=0$: the
+noise-free $k^{-1/2}$ decay). The dot on each curve marks the best window
+$k^\ast=2\rho$, with peak value $(2/3\sqrt3)\,\gamma_1/\sqrt\rho$: every curve has
+the same shape, rescaled by $\rho$, so only this peak height falls as $\rho$
+grows, clearing the dashed $1\,\%$ line for $\rho=10,10^2,10^3$ but falling
+below it for any $\rho\gtrsim1.5\times10^{3}$.}
+\label{fig:observability}
+\end{figure}
+
+\section{First-passage consequences}
+\label{sec:first_passage}
+
+Consider deposition without removal, $R(t)=R_0+D(t)$, and a generic threshold
+$x>R_0$. The continuous first-passage time is
+\begin{equation}
+  T_x=\inf\{t\geq0:R(t)\geq x\}.
+  \label{eq:first_passage_definition}
+\end{equation}
+Because the process is nondecreasing,
+\begin{equation}
+  \Pr(T_x\leq t)=\Pr[D(t)\geq x-R_0].
+  \label{eq:first_passage_identity}
+\end{equation}
+In an engineering application, setting $x$ equal to a cleaning or performance
+limit makes $T_x$ equivalent to a remaining useful life.
+
+We define the dimensionless threshold distance
+\begin{equation}
+  n_x=\frac{x-R_0}{m\tau_0}.
+  \label{eq:threshold_distance}
+\end{equation}
+For $n_x\gg1$, and with time measured in sampling periods, the leading
+passage-time moments are
+\begin{align}
+  \frac{\mathbb{E}[T_x]}{\tau_0}
+  &=n_x+\frac{1+c^{2}}{2}+o(1),
+  \label{eq:first_passage_moments}\\
+  \frac{\operatorname{Var}(T_x)}{\tau_0^{2}}
+  &=c^2 n_x\bigl[1+O(n_x^{-1})\bigr],
+\end{align}
+the expansion being in the threshold distance $n_x$ rather than in $\tau_0$.
+Equation~\eqref{eq:first_passage_moments} is the mean for passage
+\emph{detected at the sampling instants}; in continuous time the overshoot is
+the stationary overshoot of the subordinator, of mean $\ell/2$, and the
+correction is $c^{2}/2$ instead: the extra half-period is the cost of
+discrete observation. To leading order,
+\begin{equation}
+  \operatorname{CV}(T_x)
+  =\frac{c}{\sqrt{n_x}}+O(n_x^{-1}).
+  \label{eq:first_passage_cv}
+\end{equation}
+The mean rate fixes the leading passage time, while $c$ fixes its leading
+relative uncertainty. Cleaning-schedule optimization under uncertainty treats the
+fouling law as deterministic with uncertain parameters or
+inputs~\cite{AlIsmaili2019,DiPretoro2021}; for a distant threshold that uncertainty dominates, the intrinsic variability adding only a relative spread
+$c/\sqrt{n_x}$. 
+
+
+The deposition law enters neither the mean nor the spread, but only the third
+cumulant,
+%
+\begin{equation}
+  \operatorname{skew}[T_x]=\frac{3c-\gamma_1}{\sqrt{n_x}},
+  \label{eq:fpt_skew_main}
+\end{equation}
+%
+so that the remaining life is positively skewed for the compound Poisson and
+Gamma laws, whose increment skewness satisfies $\gamma_1<3c$, and symmetric to
+this order for the inverse Gaussian law, whose increment skewness is exactly
+$3c$ (Table~\ref{tab:three_laws}). Because the skew decays as $n_x^{-1/2}$
+(Fig.~\ref{fig:rul_distribution}),
+the law is visible in the life distribution only for a threshold a few
+increments away. At a threshold $n_x=220$ 
+increments away, the three laws agree on the mean
+life to $0.2$ sampling periods and on every percentile from the $5$th to the $95$th to within 
+$0.9\,\%$ (Supplementary Material, Sec.~S7); at $n_x=5$ the same percentiles spread by
+up to three periods on a mean life of seven periods. For a distant
+threshold the choice of law is immaterial, and what is not immaterial is $c$,
+which sets the spread, and the uncertainty of $m$, which dominates it.
+
+
+The asymptotic argument, overshoot qualification, and distinction
+between continuous passage and passage first detected at discrete observation
+times, together with the range of validity of
+Eqs.~\eqref{eq:first_passage_moments}--\eqref{eq:fpt_skew_main} at small
+$n_x$, are given in Supplementary Material, Sec.~S7. With removal, the process
+is no longer monotone and Eq.~\eqref{eq:first_passage_identity} does not hold;
+the passage problem must then be treated separately. Exact results are
+nevertheless available in special cases: for constant-rate removal the
+moments of the time to clear a deposit are known in closed form for compound
+Poisson deposition \cite{Zacks2005}, and for infinite-activity
+deposition the passage event can be simulated exactly
+\cite{Chi2016,GonzalezCazares2023}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=86mm]{Figures/fig05_rul_ridgeline}
+\caption{Distribution of the remaining useful life for compound-Poisson
+deposition at $c=2$ ($10^{5}$ paths, passage detected at integer sampling
+periods), for thresholds $n_x=5,20,40,\dots,200$ increments away. Each ridge is
+the probability mass of $T_x/\tau_0$, scaled to a common peak height and drawn
+on a baseline at its $n_x$; the black tick marks the mean life
+$n_x+(1+c^2)/2$, Eq.~\eqref{eq:first_passage_moments}. The distribution drifts
+linearly with $n_x$, widens as $c\sqrt{n_x}$ and loses its right skew as
+$(3c-\gamma_1)/\sqrt{n_x}$, Eq.~\eqref{eq:fpt_skew_main}.}
+\label{fig:rul_distribution}
+\end{figure}
+
+
+The preceding results assume stationary operating conditions. A known,
+deterministic variation in deposition intensity can be represented by the
+operational clock
+\begin{equation}
+  \Lambda(t)=\int_0^t \chi(u)\,du,
+  \label{eq:operational_clock}
+\end{equation}
+where $\chi(u)\geq0$ is a relative deposition intensity. Replacing $D(t)$ by
+$D[\Lambda(t)]$ makes all cumulants scale with $\Lambda(t)$; in particular,
+\begin{equation}
+  \mathbb{E}\{D[\Lambda(t)]\}=m\Lambda(t).
+  \label{eq:time_changed_mean}
+\end{equation}
+The stationary theory therefore remains valid on the operational clock.
+Prediction in calendar time additionally requires future operating
+conditions, whose uncertainty is distinct from the intrinsic deposition
+variability represented by $c$ and $\alpha$.
+
+
+\section{Implications and conclusions}
+\label{sec:implications}
+\label{sec:conclusions}
+
+The classical linear and asymptotic fouling laws are universal first-moment
+laws of stationary additive deposition with a finite mean rate, and this fixes
+what a monitored fouling resistance can reveal. A linear or Kern--Seaton fit
+returns a net deposition rate $m$ and, if the record saturates, a relaxation
+rate $\psi$, or equivalently $R_\infty$ and $\psi^{-1}$; nothing more is in
+the mean. A good fit is therefore not evidence that removal acts, nor of which
+removal mechanism acts, nor of any deposition model, since every additive
+mechanism with the same $m$ and $\psi$ fits equally well
+(Sec.~\ref{sec:removal_summary}); the same caution applies, once measurement
+noise is included, to an increment law selected by
+likelihood~\cite{ZhangRevie2016}. Even $m$ is a single combination: writing
+deposition as transport to the wall followed by
+attachment~\cite{PatersonFryer1988}, it constrains the product of a transport
+coefficient, an attachment probability and the deposit density, not the
+factors individually. How $m$ and $\psi$ depend on velocity, temperature and
+composition remains the proper object of mechanistic modelling, but must be
+read across operating points, not from the shape of one curve.
+
+The information the fit discards is in the scatter about it, and for a
+saturating record it can be read with three steps. First, subtract the
+fitted mean curve. Second, estimate the variance of the residuals on the
+plateau and subtract the measurement contribution $(\epsilon/U)^2$, with
+$\epsilon$ from Eq.~\eqref{eq:epsilon_propagation}. Third, compare the excess
+with the scales of Table~\ref{tab:plateau}. Continuous removal and
+per-element detachment leave a plateau variance of order $\ell R_\infty$,
+a relative scatter $\mathrm{CV}_\infty^2\sim\ell/R_\infty$ that is small
+whenever the plateau holds many events. Sloughing leaves a floor of order
+$\eta R_\infty^2$ that does not shrink as the deposition becomes smooth,
+Eq.~\eqref{eq:sloughing_variance}. A plateau scatter well above the
+measurement noise, and a fair fraction of $R_\infty$, therefore points to
+intermittent removal; a scatter at the noise level is consistent with
+continuous removal or with blocking. Blocking is told apart in time rather
+than on the plateau: its variance peaks at half coverage and vanishes at
+saturation (Sec.~\ref{sec:variance_removal}). The autocorrelation of the
+residuals does not discriminate, since it decays as $e^{-\psi\tau}$ for all
+three mechanisms of Table~\ref{tab:plateau}.
+
+The deposition law itself, beyond its coefficient of variation $c$, cannot be
+recovered from a thermally reconstructed resistance at realistic
+measurement accuracy (Table~\ref{tab:record_length}); as
+Sec.~\ref{sec:observability} showed, a better instrument helps far more
+than a longer record, and a better-calibrated one not at all.
+
+For a cleaning limit many sampling periods away, the time to reach it is set
+by the mean rate, its uncertainty, and $c$ through the relative spread
+$c/\sqrt{n_x}$, Eq.~\eqref{eq:first_passage_cv}; the deposition law enters
+only through a skewness that fades with distance from the limit
+(Sec.~\ref{sec:first_passage}). Schedules can therefore be planned on the
+fitted rate, with an uncertainty budget dominated by that of $m$, and the
+choice of law matters only when the limit is a few periods away.
+
+Curve fitting and mechanism identification are thus different tasks: the
+first is governed by universal mean laws, the second requires fluctuation
+statistics, independent measurements, or observations across operating
+conditions. The formulation is restricted to additive, non-decreasing
+deposition with a removal rate that depends only on the current state;
+processes that change the thermal resistance without changing the deposited
+mass, such as ageing, consolidation or diffusion within wax
+gels~\cite{Singh2000,Mehrotra2021}, and state-triggered detachment such as
+spalling fall outside it. Extending the theory to these effects, and testing
+the plateau-variance discriminator on records that visibly saturate, are the
+natural next steps.
+
+\section*{Acknowledgments}
+This publication has been funded by the SFI NorwAI
+(Centre for Research-based Innovation, 309834). The author gratefully
+acknowledges the financial
+support from the Research Council of Norway and the partners of the SFI NorwAI.
+
+\section*{CRediT authorship contribution statement}
+\textbf{Simone Casolo:} Conceptualization, Methodology, Formal analysis,
+Software, Visualization, Writing -- original draft, Writing -- review \& editing.
+
+\section*{Declaration of competing interest}
+The author declares that he has no other
+known competing financial interests or personal relationships that could have
+appeared to influence the work reported in this paper.
+
+\section*{Data availability}
+Code producing figures and numerical checks is available at 
+\texttt{github.com/\allowbreak simonecasolo/\allowbreak fouling-first-moment-laws}.
+
+
+
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+During the preparation of this work the
+author used Claude (Anthropic) in order to assist with 
+drafting and revising text, checking derivations, and writing
+code. After using this tool, the author reviewed and edited
+the content as needed and takes full responsibility for the content of the
+published article.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+
+\end{document}
