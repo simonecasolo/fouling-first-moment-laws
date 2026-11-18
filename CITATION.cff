@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite both the paper and this repository."
-title: "Code and reproducibility notebooks for: Classical fouling laws as first-moment identities of additive stochastic deposition"
+title: "Code and reproducibility notebooks for: Classical heat exchanger fouling-resistance laws as first-moment identities of additive stochastic deposition"
 type: software
 authors:
   - family-names: Casolo
@@ -17,5 +17,13 @@ preferred-citation:
       given-names: Simone
       orcid: "https://orcid.org/0000-0003-2945-8931"
       affiliation: Cognite
-  title: "Classical fouling laws as first-moment identities of additive stochastic deposition"
-  # year, journal, volume, pages, doi: fill in on publication
+  title: "Classical heat exchanger fouling-resistance laws as first-moment identities of additive stochastic deposition"
+  year: 2026
+  month: 11
+  journal: "arXiv preprint arXiv:2611.22808"
+  url: "https://arxiv.org/abs/2611.22808"
+  identifiers:
+    - type: other
+      value: "arXiv:2611.22808"
+      description: "arXiv identifier"
+  # journal, volume, pages, doi: update on publication

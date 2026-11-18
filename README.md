@@ -10,14 +10,15 @@ Simone Casolo (Cognite, Oslo, Norway) — [ORCID 0000-0003-2945-8931](https://or
 The classical fouling-resistance curves (linear growth, Kern–Seaton
 saturation) are exact first-moment identities: they hold for *any*
 microscopic deposition law and *any* of several removal mechanisms, so a
-fitted curve identifies only a net rate and a relaxation time, never the
+fitted curve identifies only a net deposition rate and, if the record
+saturates, a relaxation time, never the
 underlying mechanism. Modelling deposition as a Lévy subordinator shows
 where the missing information actually lives — removal mechanisms separate
 in the variance of the record, deposition mechanisms only in its higher
 cumulants (skewness, kurtosis) — and that the latter are masked by ordinary
 measurement noise for all practically achievable record lengths. This
 repository reproduces every figure and every quantitative claim in the
-paper and its Supplemental Material from first principles, with no
+paper and its Supplementary Material from first principles, with no
 external data.
 
 ## Repository layout
